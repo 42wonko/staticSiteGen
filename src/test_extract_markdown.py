@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
-from inline_markdown import extract_markdown_images, extract_markdown_links, text_to_textnodes
+from inline_markdown import extract_markdown_images, extract_markdown_links, text_to_textnodes, extract_title
 
 class TestSplitNodeDelimiter(unittest.TestCase):
     # test for extact markdown images
@@ -39,6 +39,21 @@ class TestSplitNodeDelimiter(unittest.TestCase):
                 TextNode("link", TextType.LINK, "https://boot.dev"),
             ], nodes
         )
+
+    def test_extract_title_01(self):
+        markdown = '# Tolkien Fan Club'
+        headline = extract_title( markdown )
+        self.assertEqual(headline, "Tolkien Fan Club")
+
+    def test_extract_title_02(self):
+        markdown = 'Tolkien Fan Club'
+        with self.assertRaises(LookupError): headline = extract_title( markdown )
+
+    def test_extract_title_03(self):
+        markdown = '## Tolkien Fan Club'
+        with self.assertRaises(LookupError): headline = extract_title( markdown )
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
 

@@ -1,37 +1,17 @@
-from os import listdir, mkdir
-from os.path import exists, isdir, join
-from shutil import copy, rmtree
-
-import textnode
-
-def create_dir(directory):
-    pass
+import os
+import shutil
 
 
-def copy_files(src_dir, dst_dir):
-    dir_list = []
-    print(f'-D- copying {src_dir} -> {dst_dir}')
-    if (not exists(src_dir)):
-        print(f'-E- The source directory <{src_dir}> does not exists. Exiting !')
-        return
+def copy_files_recursive(source_dir_path: str, dest_dir_path: str) -> None:
+    if not os.path.exists(dest_dir_path):
+        os.mkdir(dest_dir_path)
 
-    if (not exists(dst_dir)):
-        print(f'-D- {dst_dir} does not exist -> creating it.')
-        mkdir(dst_dir)
-    
-    dir_list = listdir(src_dir)
-    for entry in dir_list:
-        if isdir(join(src_dir, entry)):
-            copy_files(join(src_dir, entry), join(dst_dir, entry))
+    for filename in os.listdir(source_dir_path):
+        from_path = os.path.join(source_dir_path, filename)
+        dest_path = os.path.join(dest_dir_path, filename)
+        print(f" * {from_path} -> {dest_path}")
+        if os.path.isfile(from_path):
+            shutil.copy(from_path, dest_path)
         else:
-            print(f'-D- copy {join(src_dir, entry)} -> {join(dst_dir, entry)}')
-            copy(join(src_dir, entry), dst_dir)
+            copy_files_recursive(from_path, dest_path)
 
-
-def main():
-#    node = textnode.TextNode("This is some anchor text", textnode.TextType.TEXT_LINK,"https://www.boot.dev")
-#    print(node)
-    copy_files("static", "public")
-
-if __name__ == "__main__":
-    main()
