@@ -1,3 +1,3 @@
 #!/bin/bash
-python3 src/main.py https://github.com/42wonko/staticSiteGen/
+python3 src/main.py  https://42wonko.github.io/staticSiteGen/
 
